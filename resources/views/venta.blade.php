@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
 
-  <title>Tienda Escolar</title>
+  <title>Tienda Online</title>
 
   
   <script src="https://cdn.tailwindcss.com"></script>
