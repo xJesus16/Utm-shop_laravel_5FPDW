@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
 
-  <title>Coffee Shop</title>
+  <title>Tienda Escolar</title>
 
   
   <script src="https://cdn.tailwindcss.com"></script>
