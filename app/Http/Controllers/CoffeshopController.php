@@ -6,6 +6,7 @@ use App\Models\Producto;
 use App\Models\Tamanio;
 use App\Models\Extra;
 use App\Models\CategoriaExtra;
+use stdClass;
 
 class CoffeshopController extends Controller{
 
@@ -128,6 +129,10 @@ class CoffeshopController extends Controller{
             $context=$r->all();
             //dd($context);
             return response()->json($context);
+            $x=new stdClass();
+            $x->idcliente=1;
+            $x->canal='WEB';
+            $x->idcanal='0';
         }
 
 
