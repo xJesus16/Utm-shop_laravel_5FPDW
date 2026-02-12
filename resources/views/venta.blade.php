@@ -71,7 +71,7 @@
         <div id="app" class="gap-1 px-6 flex flex-1 justify-center py-5">
 
           <div  class="layout-content-container flex flex-col max-w-[920px] flex-1">
-            <!--@{{orden}}  contenido del pedido-->  
+            <!--@{{orden}}  contenido del pedido--> 
             <div v-if="!extras" class="flex flex-wrap justify-between gap-3 p-4"><p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight min-w-72">Realiza un pedido</p></div>
             <div v-if="!extras" class="pb-3">
               <div class="flex border-b border-[#e6e1db] px-4 gap-8">
