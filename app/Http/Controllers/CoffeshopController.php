@@ -6,6 +6,7 @@ use App\Models\Producto;
 use App\Models\Tamanio;
 use App\Models\Extra;
 use App\Models\CategoriaExtra;
+use App\Servicio\ServicioOrden;
 use stdClass;
 
 class CoffeshopController extends Controller{
@@ -127,12 +128,18 @@ class CoffeshopController extends Controller{
 
         function guardar_orden(Request $r){
             $context=$r->all();
+            $s=new ServicioOrden(); 
             //dd($context);
-            return response()->json($context);
+            // return response()->json($context);
             $x=new stdClass();
             $x->idcliente=1;
-            $x->canal='WEB';
-            $x->idcanal='0';
+            $x->idusuario=1;
+            // $x->canal='APP';
+            // $x->idcanal='0';
+            $x->productos=$context;
+            $s->registrar($x);
+
+            // $s->registrar($context,1,1,);
         }
 
 
