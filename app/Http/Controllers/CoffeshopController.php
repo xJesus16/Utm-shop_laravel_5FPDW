@@ -128,16 +128,14 @@ class CoffeshopController extends Controller{
 
         function guardar_orden(Request $r){
             $context=$r->all();
-            $s=new ServicioOrden(); 
-            //dd($context);
-            // return response()->json($context);
-            $x=new stdClass();
+            $s=new ServicioOrden();
+            $x=new \stdClass();
             $x->idcliente=1;
             $x->idusuario=1;
-            // $x->canal='APP';
-            // $x->idcanal='0';
             $x->productos=$context;
             $s->registrar($x);
+
+           // return response()->json($context);
 
             // $s->registrar($context,1,1,);
         }
