@@ -69,7 +69,6 @@
         </header>
         <!-- Seccion de la gestion de la orden -->
         <div id="app" class="gap-1 px-6 flex flex-1 justify-center py-5">
-
           <div  class="layout-content-container flex flex-col max-w-[920px] flex-1">
             <!--@{{orden}}  contenido del pedido--> 
             <div v-if="!extras" class="flex flex-wrap justify-between gap-3 p-4"><p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight min-w-72">Realiza un pedido</p></div>
@@ -267,15 +266,17 @@
             </div>
             <div class="flex px-4 py-3">
               <button
+              :disabled="procesando_orden"
                 @click="guardar_orden"
                 class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 flex-1 bg-[#059669] text-white text-sm font-bold leading-normal tracking-[0.015em] mr-2"
->
-              <span class="truncate">Complete Order</span>
+                >
+                  <svg v-if="procesando_orden" width="30" height="30" fill="hsl(228, 97%, 42%)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg>
+              <span v-else="" class="truncate">Complete Order</span>
               </button>
               <button
                 @click="eliminar"
                 class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 flex-1 bg-[#ef4444] text-white text-sm font-bold leading-normal tracking-[0.015em]"
->
+                  >
                 <span class="truncate">Vaciar</span>
               </button>
             </div>
@@ -398,6 +399,7 @@
                    ,impuesto:.16
                    ,extras:false
                    ,producto_seleccionado:-1
+                   ,procesando_orden:false
 
 
               }
@@ -485,7 +487,13 @@
                         this.orden.splice(index);
                       }
 
+                      ,limpiar_orden:function(){
+                        this.orden.splice(0,this.orden.length);
+                      }
+
                       ,guardar_orden:function(){
+                        console.log('Ha guardar se ha dicho');
+                        this.procesando_orden=true;
                             var self=this;
                             //El objetivo XMLHttpRequest es el encargado de hacer las peticiones asincronas
                             var xhr = new XMLHttpRequest();
@@ -494,26 +502,22 @@
                           xhr.open('POST', '/api/venta/save', true);
                           //Se hace esta linea para indicar a Javascript que este pendiente
                           //cuando el estado de la peticion cambie
-                          //xhr.onreadystatechange =  function(){
+                          xhr.onreadystatechange =  function(){
                           //En esta linea preguntamos si la conexion se ha terminado
-                              //if (this.readyState == 4){
+                              if (this.readyState == 4){
+                                self.procesando_orden=false;
                                 //Es que el resultado de la conexion sea exitoso
-                                //if (this.status == 200){
-                                    //En esta variable se encuentra el contenido de la respuesta
+                                if (this.status == 200){
+                                  alert('Orden guardada!!!');
+                                   // En esta variable se encuentra el contenido de la respuesta
                                     //Que viene del backend this.responseText
-                                  //  info=JSON.parse(this.responseText);
-                                    //console.log(info);
-                                    //for(e=0;e<info.length;e++){
-                                      //self.productos.push(info[e]);
-                                      //console.log(self.productos);
-                                    //}
-
-                           // }
-                           // else{
-                               // alert('Algo salio mal');
-                            //}
-                        //}
-                        //}
+                            }
+                           else{
+                               alert('Algo salio mal');
+                            }
+                            self.limpiar_orden();
+                        }
+                        }
                       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                       xhr.send(JSON.stringify(this.orden));
 

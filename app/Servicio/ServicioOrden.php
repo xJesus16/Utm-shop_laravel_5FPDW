@@ -4,6 +4,7 @@ namespace App\Servicio;
 
 use App\Models\Orden;
 use App\Models\DetalleOrden;
+use App\Models\ExtraOrden;
 
 
 class ServicioOrden
@@ -70,14 +71,28 @@ class ServicioOrden
             else
                 $d->idpromocion = 0;
 
-            $total=$total+$d->cantidad*$d->precio;
-
-
+            $total=$total+($d->cantidad*$d->precio);
+            $num_productos=$num_productos+$d->cantidad;
             $d->save();
+
+            foreach($elemento['extras']as $extra){
+             $ex=new ExtraOrden();
+             $ex->idextra=$extra['id'];
+             $ex->iddetalle_orden=$d->id;
+             if(isset($extra['cantidad']))
+             $ex->cantidad=$extra['cantidad'];
+            else
+                $ex->cantidad=1;
+
+                $total=$total+( $ex->cantidad*$extra['precio']);
+                $ex->save();
+            }
+
         }
+        
 
         $o->total = $total;
         $o->num_productos = $num_productos;
         $o->save();
     }
-}
+} 
