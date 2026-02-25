@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function show()
+     function show()
     {
-        return view('auth.login');
+        return view('auth.login', ['usuario' => (object)['id' => '']]);
     }
 
-    public function login(Request $request)
+     function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -22,15 +22,14 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('venta')->with('success', 'Bienvenido de nuevo!');
-        }
-
+        return redirect()->route('venta')->with('success', 'Bienvenido de nuevo!');
+    }
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
+            'email' => 'Contraseña incorrecta.',
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+     function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();

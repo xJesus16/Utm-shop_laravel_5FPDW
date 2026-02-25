@@ -11,3 +11,13 @@ border-b-[3px] border-b-[#181511]
 
 
             Primera Forma :
+
+
+
+
+            select cliente.nombre
+,sum(orden.total)
+from orden
+join cliente on cliente.id=idcliente
+GROUP by cliente.id
+order by sum(orden.total);

@@ -70,7 +70,6 @@ class ServicioOrden
                 $d->idpromocion = $elemento['idpromocion'];
             else
                 $d->idpromocion = 0;
-
             $total=$total+($d->cantidad*$d->precio);
             $num_productos=$num_productos+$d->cantidad;
             $d->save();
@@ -96,3 +95,5 @@ class ServicioOrden
         $o->save();
     }
 } 
+
+

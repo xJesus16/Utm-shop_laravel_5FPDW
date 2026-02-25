@@ -20,7 +20,7 @@ function hoy($formato='Y-m-d H:i:s'){
 // function dame_usuario(){
 //     return Auth::user();
 // }
-// function dame_jugador(){
+// function dame_usuario(){
 //     //1 obtener el idusuario de la sesion
 //     $idusuario = Auth::user()->id;
 //     // 2 obtener el jugador asociado al jugador
