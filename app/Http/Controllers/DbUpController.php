@@ -7,6 +7,7 @@ use App\Models\Usuario;
 use App\Models\Edad;
 use App\Models\Ocupacion;
 use App\Models\Producto;
+use App\Models\Extra;
 use App\Servicio\ServicioOrden;
 use Faker\Factory as Faker;
 
@@ -52,12 +53,12 @@ class DbUpController extends Controller
 
     //  Ordenes
 
-    function orden()
-    {
+    function orden(){
         $faker = Faker::create();
         $servicio = new ServicioOrden();
         $clientes = Cliente::all();
         $productos = Producto::all();
+        $extras = Extra::all();
 
 
         for ($i = 1; $i <= 100; $i++) {
