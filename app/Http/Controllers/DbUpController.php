@@ -53,7 +53,8 @@ class DbUpController extends Controller
 
     //  Ordenes
 
-    function orden(){
+    function orden()
+    {
         $faker = Faker::create();
         $servicio = new ServicioOrden();
         $clientes = Cliente::all();
@@ -73,11 +74,31 @@ class DbUpController extends Controller
             $lista_productos = $productos->random($num_productos);
             $objeto->productos = array();
             foreach ($lista_productos as $p) {
+
+
+                //crear extras con ayuda del faker y la coleccion de extras
+                $cantidad_extras = $faker->numberBetween(1, 10);
+                $extras_random = $extras->random($cantidad_extras);
+
+                
+                $lista_extras = [];
+
+        foreach($extras_random as $extra){
+            $lista_extras[]=[
+                "id" => $extra->id,
+                "precio" => $extra->precio,
+                "cantidad" => $faker->numberBetween(1, 10)
+            ];
+        }
+        //crear extras aleatoriamente 
+
                 $objeto->productos[] = [
                     "id" => $p->id,
                     "cantidad" => 1,
                     "precio" => $p->precio,
-                    "extras" => array()
+                    "extras" => $lista_extras
+                    // "extras" => array()
+
                 ];
             }
             $servicio->registrar($objeto);

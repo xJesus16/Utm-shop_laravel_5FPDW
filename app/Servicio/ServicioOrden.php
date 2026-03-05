@@ -64,7 +64,7 @@ class ServicioOrden
             if (isset($elemento['cantidad']))
                 $d->cantidad = $elemento['cantidad'];
             else
-                $d->cantidad = 1;
+            $d->cantidad = 1;
             $d->precio = $elemento['precio'];
             if (isset($elemento['idpromocion']))
                 $d->idpromocion = $elemento['idpromocion'];
@@ -78,6 +78,7 @@ class ServicioOrden
              $ex=new ExtraOrden();
              $ex->idextra=$extra['id'];
              $ex->iddetalle_orden=$d->id;
+             $ex->precio=$extra['precio'];
              if(isset($extra['cantidad']))
              $ex->cantidad=$extra['cantidad'];
             else

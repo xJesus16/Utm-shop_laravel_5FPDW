@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoffeshopController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CategoriaExtraController;
+use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\DbUpController;
 use App\Http\Controllers\TamanioController;
 use App\Http\Controllers\ExtraController;
@@ -21,6 +22,9 @@ Route::get('/venta/categorias',[CoffeshopController::class, 'categorias'])->name
 Route::get('/venta/tamanios',[CoffeshopController::class, 'tamanios'])->name('tamanios');
 Route::get('/dbup/cliente',[DbUpController::class, 'clientes'])->name('clientes');
 Route::get('/dbup/orden',[DbUpController::class, 'orden'])->name('orden');
+Route::get('/dashboard/ventas',[DashBoardController::class, 'total_ventas'])->name('total_ventas');
+Route::get('/dashboard/ventas/canal',[DashBoardController::class, 'total_ventas_canal'])->name('total_ventas_canal');
+Route::get('/dashboard/ventas/producto',[DashBoardController::class, 'total_ventas_producto'])->name('total_ventas_producto');
 // por ai acaso Route::post('/venta/save',[CoffeshopController::class, 'guardar_orden'])->name('guardar_orden');
 
 //Catalogo tipo de Categorias
