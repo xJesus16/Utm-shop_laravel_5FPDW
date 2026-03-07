@@ -165,6 +165,8 @@ class ServicioKPI
                 ->addSelect(DB::raw("DATE_FORMAT(orden.fecha,'%m-%Y') as fecha"));
         }
 
+        
+
         if($objeto->idproducto!=0){
             $consulta->where("producto.id",$objeto->idproducto);
         }

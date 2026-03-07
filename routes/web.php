@@ -25,6 +25,7 @@ Route::get('/dbup/orden',[DbUpController::class, 'orden'])->name('orden');
 Route::get('/dashboard/ventas',[DashBoardController::class, 'total_ventas'])->name('total_ventas');
 Route::get('/dashboard/ventas/canal',[DashBoardController::class, 'total_ventas_canal'])->name('total_ventas_canal');
 Route::get('/dashboard/ventas/producto',[DashBoardController::class, 'total_ventas_producto'])->name('total_ventas_producto');
+Route::get('/dashboard',[DashBoardController::class, 'index'])->name('index');
 // por ai acaso Route::post('/venta/save',[CoffeshopController::class, 'guardar_orden'])->name('guardar_orden');
 
 //Catalogo tipo de Categorias
