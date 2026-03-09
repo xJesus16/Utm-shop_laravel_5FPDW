@@ -1,0 +1,30 @@
+ Sin filtro de producto y sin tendencias
+select SUM(orden.total)
+from orden
+where DATE_SUB(now(), INTERVAL 3 MONTH)
+
+
+-- Con filtro y sin tendencias
+select SUM(detalle_orden.precio * detalle_cantidad)
+from orden
+join detalle_orden on detalle_orden.idorden = orden.id
+where orden.fecha >= DATE_SUB(now(), INTERVAL 3 MONTH)
+and detalle_orden.idproducto = 1;
+
+-- Con filtro y tendencias
+select SUM(detalle_orden.cantidad * detalle_orden.precio),
+       DATE_FORMAT(orden.fecha, '%m-%Y') as fecha
+from orden
+join detalle_orden on orden.id = detalle_orden.idorden
+where DATE_SUB(now(), INTERVAL 3 MONTH)
+and detalle_orden.idproducto = 13
+group by DATE_FORMAT(orden.fecha, '%m-%Y')
+order by DATE_FORMAT(orden.fecha, '%Y-%m') desc
+
+ Sin filtro de producto con tendencias
+select SUM(orden.total),
+       DATE_FORMAT(orden.fecha, '%m-%Y') as fecha
+from orden
+where DATE_SUB(now(), INTERVAL 3 MONTH)
+group by DATE_FORMAT(orden.fecha, '%m-%Y')
+order by DATE_FORMAT(orden.fecha, '%Y-%m') desc

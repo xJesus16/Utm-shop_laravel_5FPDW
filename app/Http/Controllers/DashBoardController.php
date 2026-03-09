@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Usuario;
 use App\Models\Edad;
@@ -17,17 +18,24 @@ class DashBoardController extends Controller
 {
     function index(){
         $datos=array();
+        $datos['productos']=Producto::all();
         return view('dashboard.index')->with($datos);
     }
 
-    function total_ventas()
+    function total_ventas(Request $r)
     {
+        $context=$r->all();
+        // dd($context);
         $servicio = new ServicioKPI();
         $objeto = new \stdClass();
+        if(isset($context['idproducto']))
+        $objeto->idproducto=$context['idproducto'];
         $info = $servicio->total_ventas($objeto);
         // dd($info[0]->total);
         $objeto1 = new \stdClass();
         $objeto1->tendencias = true;
+         if(isset($context['idproducto']))
+        $objeto1->idproducto=$context['idproducto'];
         // $objeto1->meses=6;
         $info2 = $servicio->total_ventas($objeto1);
         // dd($info2);
