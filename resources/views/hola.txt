@@ -21,3 +21,125 @@ from orden
 join cliente on cliente.id=idcliente
 GROUP by cliente.id
 order by sum(orden.total);
+
+
+
+  {
+         
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            borderRadius: 5,
+            borderRadiusApplication: 'end'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        },
+        yaxis: {
+          title: {
+            text: '$ (thousands)'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "$ " + val + " thousands"
+            }
+          }
+        }
+        }
+
+
+
+        
+        /*
+                  var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:8888/peticion_asincrona/datos.php', true);
+            var self = this;
+
+            //Antes de pintar todo borro las etiquetas y las series
+            this.series1.splice(0,this.series1.length);
+            this.labels1.splice(0,this.labels1.length);
+
+            //Antes de pintar todo borro las etiquetas y las series
+            xhr.onreadystatechange = function() {
+
+                //Pregunto si la conexion se termino
+                if (this.readyState == 4){
+
+                    //Pregunto si todo salio bien
+                    if(this.status == 200){
+
+                    }
+                }
+            }
+      */
+
+
+
+
+
+
+
+
+
+
+      
+          ,configuracion1: {
+
+            chart: {
+              type: 'bar',
+              height: 350
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                borderRadius: 5,
+                borderRadiusApplication: 'end'
+              },
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+            },
+            xaxis: {
+              categories: ['Total de ventas'],
+            },
+            yaxis: {
+              title: {
+                text: '$ (thousands)'
+              }
+            },
+            fill: {
+              opacity: 1
+            },
+            tooltip: {
+              y: {
+                formatter: function(val) {
+                  return "$ " + val + " thousands"
+                }
+              }
+            }
+          }

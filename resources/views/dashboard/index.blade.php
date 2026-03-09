@@ -66,7 +66,7 @@
               <div class="flex items-start justify-between">
                 <div class="flex flex-col gap-2">
                   <p class="text-[#181511] text-base font-medium leading-normal">Ventas totales</p>
-                  <p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight truncate">$1,250</p>
+                  <p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight truncate">$@{{total_ventas}}</p>
                   <div class="flex gap-1">
                     <p class="text-[#897961] text-base font-normal leading-normal">Promedio diario</p>
                     <p class="text-[#078810] text-base font-medium leading-normal">$1,250</p>
@@ -86,8 +86,8 @@
                 <div>
                   <!-- Aqui va la grafica -->
                   <apexchart
-                    :options="configuracion"
-                    :series="valores">
+                    :options="chart1.configuracion"
+                    :series="chart1.series">
                   </apexchart>
                 </div>
                 <div class="flex justify-around">
@@ -108,18 +108,12 @@
                 <p class="text-[#897961] text-base font-normal leading-normal">Capuchino</p>
                 <p class="text-[#078810] text-base font-medium leading-normal">20</p>
               </div>
-              <div class="grid min-h-[180px] grid-flow-col gap-6 grid-rows-[1fr_auto] items-end justify-items-center px-3">
-                <div class="border-[#897961] bg-[#f4f3f0] border-t-2 w-full" style="height: 20%;"></div>
-                <p class="text-[#897961] text-[13px] font-bold leading-normal tracking-[0.015em]">Latte</p>
-                <div class="border-[#897961] bg-[#f4f3f0] border-t-2 w-full" style="height: 50%;"></div>
-                <p class="text-[#897961] text-[13px] font-bold leading-normal tracking-[0.015em]">Cappuccino</p>
-                <div class="border-[#897961] bg-[#f4f3f0] border-t-2 w-full" style="height: 30%;"></div>
-                <p class="text-[#897961] text-[13px] font-bold leading-normal tracking-[0.015em]">Espresso</p>
-                <div class="border-[#897961] bg-[#f4f3f0] border-t-2 w-full" style="height: 0%;"></div>
-                <p class="text-[#897961] text-[13px] font-bold leading-normal tracking-[0.015em]">Americano</p>
-                <div class="border-[#897961] bg-[#f4f3f0] border-t-2 w-full" style="height: 60%;"></div>
-                <p class="text-[#897961] text-[13px] font-bold leading-normal tracking-[0.015em]">Mocha</p>
-              </div>
+              Aqui va la otra grafica
+              <apexchart
+                :options="configuracion"
+                :series="valores">
+              </apexchart>
+
             </div>
           </div>
           <div class="flex flex-wrap gap-4 px-4 py-6">
@@ -196,6 +190,7 @@
   <script src="{{ asset('apexcharts.js') }}"></script>
   <script src="{{ asset('vue.js') }}"></script>
   <script src="{{ asset('vue-apexcharts.js') }}"></script>
+  <script src="{{ asset('PlantillaColumna.js') }}"></script>
   <script>
     Vue.use(VueApexCharts);
     //  Vue.component('apexchart', VueApexCharts);
@@ -203,13 +198,16 @@
       el: '#app',
       data: function() {
         return {
-          valores: [44, 55, 13, 43, 22],
-          configuracion: {
+          total_ventas: 0
+          ,series1:[]
+          ,valores: [44, 55, 13, 43, 22]
+          // ,valores1:[] 
+          ,configuracion: {
             chart: {
               width: 380,
               type: 'pie',
             },
-            labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+            labels: ['Canal A', 'Canal B', 'Canal C', 'Canal D', 'Canal E'],
             responsive: [{
               breakpoint: 480,
               options: {
@@ -223,13 +221,53 @@
             }]
           }
         }
-      },
-      methods: {}
+      }
+      ,methods: {}
+      ,computed:{
+      chart1:function(){
+        let=plantilla=Columna();
+        plantilla.xaxis.categories.push('Ventas');
+        let=final={
+          series:this.series1
+          ,configuracion:plantilla
+        }
+        return final;
+      }
+      }
 
-      ,
-      components: {
+      ,components: {
         apexchart: VueApexCharts
       }
+
+      
+      ,created() {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{route("total_ventas")}}', true);
+        var self = this;
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+
+            //Pregunto si todo salio bien
+            if (this.status == 200) {
+              info = JSON.parse(this.responseText);
+              self.total_ventas = info.total;
+              for (i = 0; i < info.tendencias.length; i++) {
+                self.series1.push({
+                  name: info.tendencias[i].fecha,
+                  data: [info.tendencias[i].total]
+                }); 
+              }
+              console.log('ya calleron los datos', info);
+            }
+
+          }
+
+        }
+        xhr.send();
+
+      }
+
     });
   </script>
 </body>
