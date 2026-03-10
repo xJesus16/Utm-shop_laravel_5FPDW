@@ -97,6 +97,56 @@ order by sum(orden.total);
 
 
 
+      Nombre de la categoria, total de ventas de los ultimos 3 meses
+        select categoria.nombre
+          ,sum(detalle_orden.precio*detalle_orden.cantidad)
+          from detalle_orden
+          join detalle_orden on orden.id=detalle_orden.idorden
+          join producto on producto.id=detalle_orden.idproducto
+          join categorio on categoria categoria.id=producto.categoria
+          join cliente on orden.idcliente=cliente.id
+          where DATE_SUB(now(), INTERVAL 3 MONTH)
+            and cliente.genero='Mujer'
+
+
+            //Agrupado para que funcione con mi version
+                        SELECT 
+              categoria.nombre,
+              SUM(detalle_orden.cantidad * detalle_orden.precio) AS total
+          FROM orden
+          JOIN detalle_orden 
+              ON detalle_orden.idorden = orden.id
+          JOIN producto 
+              ON detalle_orden.idproducto = producto.id
+          JOIN categoria 
+              ON categoria.id = producto.categoria
+          JOIN cliente 
+              ON orden.idcliente = cliente.id
+          WHERE orden.fecha >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+          AND cliente.genero = 'Mujer'
+          GROUP BY categoria.nombre;
+
+          SELECT 
+    categoria.nombre,
+    SUM(detalle_orden.cantidad * detalle_orden.precio) AS total_ventas
+FROM orden
+JOIN detalle_orden 
+    ON orden.id = detalle_orden.idorden
+JOIN producto 
+    ON detalle_orden.idproducto = producto.id
+JOIN categoria 
+    ON categoria.id = producto.categoria
+JOIN cliente 
+    ON orden.idcliente = cliente.id
+WHERE orden.fecha >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+AND cliente.genero = 'Mujer'
+GROUP BY categoria.nombre;
+                    
+          
+
+
+
+
 
 
 

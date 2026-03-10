@@ -16,26 +16,28 @@ use Faker\Factory as Faker;
 
 class DashBoardController extends Controller
 {
-    function index(){
-        $datos=array();
-        $datos['productos']=Producto::all();
+    function index()
+    {
+        $datos = array();
+        $datos['productos'] = Producto::all();
+        $datos['generos'] = array('Hombre', 'Mujer', 'No indica');
         return view('dashboard.index')->with($datos);
     }
 
     function total_ventas(Request $r)
     {
-        $context=$r->all();
+        $context = $r->all();
         // dd($context);
         $servicio = new ServicioKPI();
         $objeto = new \stdClass();
-        if(isset($context['idproducto']))
-        $objeto->idproducto=$context['idproducto'];
+        if (isset($context['idproducto']))
+            $objeto->idproducto = $context['idproducto'];
         $info = $servicio->total_ventas($objeto);
         // dd($info[0]->total);
         $objeto1 = new \stdClass();
         $objeto1->tendencias = true;
-         if(isset($context['idproducto']))
-        $objeto1->idproducto=$context['idproducto'];
+        if (isset($context['idproducto']))
+            $objeto1->idproducto = $context['idproducto'];
         // $objeto1->meses=6;
         $info2 = $servicio->total_ventas($objeto1);
         // dd($info2);
@@ -72,23 +74,37 @@ class DashBoardController extends Controller
     function total_ventas_producto()
     {
         $servicio = new ServicioKPI();
-        $objeto=new \stdClass();
+        $objeto = new \stdClass();
         $info = $servicio->ventas_productos($objeto);
         // dd($info[count($info)-1]);
-         $resultado = new \stdClass();
-         $resultado->top=$info[0];
-         $resultado->bottom=$info[count($info)-1];
-         $resultado->productos=$info;
+        $resultado = new \stdClass();
+        $resultado->top = $info[0];
+        $resultado->bottom = $info[count($info) - 1];
+        $resultado->productos = $info;
 
-         $objeto1=new \stdClass(); 
-         $objeto1->tendencias=true;
+        $objeto1 = new \stdClass();
+        $objeto1->tendencias = true;
         //  $objeto1->idproducto=3;
-         $info2=$servicio->ventas_productos($objeto1);
-         dd($info2);
-        $resultado->tendencias=$info2;
+        $info2 = $servicio->ventas_productos($objeto1);
+        dd($info2);
+        $resultado->tendencias = $info2;
 
-         return response()->json($resultado);
+        return response()->json($resultado);
+    }
 
 
+    function total_ventas_categoria(Request $r)
+    {
+        $context = $r->all();
+
+
+        $servicio = new ServicioKPI();
+        $objeto = new \StdClass();
+        if (isset($context['genero']))
+            $objeto->genero = $context['genero'];
+        $resultado = new \stdClass();
+        $info = $servicio->total_categorias($objeto);
+        $resultado->categorias=$info;
+        return response()->json($resultado);
     }
 }

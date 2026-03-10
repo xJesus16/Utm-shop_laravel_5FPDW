@@ -83,6 +83,7 @@
               <div class="flex min-h-[180px] flex-1 flex-col gap-8 py-4">
                 <div>
                   <!-- Aqui va la grafica -->
+                   
                   <apexchart
                     :options="chart1.configuracion"
                     :series="chart1.series">
@@ -100,17 +101,23 @@
               </div>
             </div>
             <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
-              <p class="text-[#181511] text-base font-medium leading-normal">Productos más vendidos</p>
+              <p class="text-[#181511] text-base font-medium leading-normal">Analisis x categoria</p>
               <p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight truncate">250</p>
               <div class="flex gap-1">
                 <p class="text-[#897961] text-base font-normal leading-normal">Capuchino</p>
                 <p class="text-[#078810] text-base font-medium leading-normal">20</p>
               </div>
+               <div class="flex items-center">
+                  <select v-model="filtro_chart_2" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                    <option value="">Todos</option>
+                    <option v-for="genero in generos" :value="genero">@{{genero}}</option>
+                  </select>
+                </div>
               Aqui va la otra grafica
-              <apexchart
-                :options="configuracion"
-                :series="valores">
-              </apexchart>
+               <apexchart
+                    :options="chart1.configuracion"
+                    :series="chart1.series">
+                  </apexchart>
 
             </div>
           </div>
@@ -196,9 +203,10 @@
       el: '#app',
       data: function() {
         return {
-          total_ventas: 0,
-          series1: [],
-          valores: [44, 55, 13, 43, 22]
+          total_ventas: 0
+         ,series1: []
+         ,series2: []
+          ,valores: [44, 55, 13, 43, 22]
             // ,valores1:[] 
 
             
@@ -219,9 +227,11 @@
                 }
               }
             }]
-          },
-          productos: <?php echo json_encode($productos); ?>,
-          filtro_chart_1: 0
+          }
+          ,productos: <?php echo json_encode($productos); ?>
+          ,generos: <?php echo json_encode($generos); ?>
+          ,filtro_chart_1: 0
+          ,filtro_chart_2: ''
         }
       }
       ,methods: {}
@@ -232,6 +242,15 @@
           let = final = {
             series: this.series1,
             configuracion: plantilla
+          }
+          return final;
+        }
+        ,chart2: function() {
+          let = plantilla = Columna();
+          plantilla.xaxis.categories.push('Ventas');
+          let = final = {
+            series: this.series2
+            ,configuracion: plantilla
           }
           return final;
         }
@@ -277,6 +296,37 @@
                       ,_token:'{{csrf_token()}}'
                       }));
         }
+        ,filtro_chart_2: function(newValue) {
+          this.series2.splice(0,this.series2.length);
+          //console.log('Este producto vamos a enviar',newValue);
+
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '{{route("total_ventas_categoria")}}', true);
+          var self = this;
+          xhr.onreadystatechange = function() {
+            if (this.readyState == 4) {
+
+              //Pregunto si todo salio bien
+              if (this.status == 200) {
+                info = JSON.parse(this.responseText);
+                for (i = 0; i < info.categorias.length; i++) {
+                  self.series2.push({
+                    name: info.categorias[i].fecha,
+                    data: [parseFloat(info.categorias[i].total)]
+                  });
+                }
+                console.log('ya calleron los datos', info);
+              }
+
+            }
+
+          }
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          xhr.send(JSON.stringify({
+                      genero:newValue
+                      ,_token:'{{csrf_token()}}'
+                      }));
+        }
       }
 
 
@@ -290,6 +340,7 @@
 
       
       ,created() {
+        // Datos del chart1
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '{{route("total_ventas")}}', true);
         var self = this;
@@ -307,6 +358,32 @@
                 });
               }
               console.log('ya calleron los datos', info);
+            }
+
+          }
+
+        }
+        xhr.send();
+
+
+        // Datos del chart2
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{route("total_ventas_categoria")}}', true);
+        var self = this;
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+
+            //Pregunto si todo salio bien
+            if (this.status == 200) {
+              info = JSON.parse(this.responseText);
+              // self.total_ventas = info.total;
+              for (i = 0; i < info.categorias.length; i++) {
+                self.series2.push({
+                  name: info.categorias[i].nombre,
+                  data: [parseFloat(info.categorias[i].total)]
+                });
+              }
+              // console.log('ya calleron los datos', info);
             }
 
           }

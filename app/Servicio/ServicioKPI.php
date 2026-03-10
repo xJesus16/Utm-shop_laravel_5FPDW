@@ -57,28 +57,27 @@ class ServicioKPI
         }
 
         if (!isset($objeto->idproducto)) {
-            $objeto->idproducto=0;
+            $objeto->idproducto = 0;
         }
 
 
         // Defino la consulta base
-        if($objeto->idproducto==0){
+        if ($objeto->idproducto == 0) {
             // Sin filtro de producto
             $consulta = DB::table('orden')
-            ->select(
-                DB::RAW('sum(orden.total) as total')
-            )
-            ->whereRAW("orden.fecha>=DATE_SUB(now(),INTERVAL " . $objeto->meses . " MONTH)");
-        }
-        else{
+                ->select(
+                    DB::RAW('sum(orden.total) as total')
+                )
+                ->whereRAW("orden.fecha>=DATE_SUB(now(),INTERVAL " . $objeto->meses . " MONTH)");
+        } else {
             //Con filtro de producto
-             $consulta = DB::table('orden')
-             ->join('detalle_orden', 'detalle_orden.idorden','=','orden.id')
-            ->select(
-                DB::RAW('sum(detalle_orden.precio * detalle_orden.cantidad) as total')
-            )
-            ->whereRAW("orden.fecha>=DATE_SUB(now(),INTERVAL " . $objeto->meses . " MONTH)")
-            ->where('detalle_orden.idproducto',$objeto->idproducto);
+            $consulta = DB::table('orden')
+                ->join('detalle_orden', 'detalle_orden.idorden', '=', 'orden.id')
+                ->select(
+                    DB::RAW('sum(detalle_orden.precio * detalle_orden.cantidad) as total')
+                )
+                ->whereRAW("orden.fecha>=DATE_SUB(now(),INTERVAL " . $objeto->meses . " MONTH)")
+                ->where('detalle_orden.idproducto', $objeto->idproducto);
         }
         // $consulta = DB::table('orden')
         //     ->select(
@@ -118,7 +117,8 @@ class ServicioKPI
     */
 
 
-    function tendencias_canal($objeto) {
+    function tendencias_canal($objeto)
+    {
         if (!isset($objeto->meses)) {
             $objeto->meses = 3;
         }
@@ -128,33 +128,33 @@ class ServicioKPI
         }
 
 
-         // Defino la consulta base
+        // Defino la consulta base
         $consulta = DB::table('orden')
             ->select(
-                DB::RAW('sum(orden.total) as total')
-                ,"orden.canal"
+                DB::RAW('sum(orden.total) as total'),
+                "orden.canal"
             )
             ->whereRAW("orden.fecha>=DATE_SUB(now(),INTERVAL " . $objeto->meses . " MONTH)")
             ->groupBy("orden.canal");
-            // ->orderBy(DB::RAW('sum(orden.total) as total'),"asc");
+        // ->orderBy(DB::RAW('sum(orden.total) as total'),"asc");
 
-             if ($objeto->tendencias) {
+        if ($objeto->tendencias) {
             $consulta->groupBy(DB::RAW("DATE_FORMAT(orden.fecha,'%m-%Y')"))
                 ->orderBy(DB::RAW("DATE_FORMAT(orden.fecha,'%m-%Y')"), "desc")
                 ->addSelect(DB::RAW("DATE_FORMAT(orden.fecha,'%m-%Y') as fecha"));
         }
 
-             
+
 
 
         //    3.-Ejecuto la consulta
         return $consulta->get();
     }
 
-        // Producto mas vendido
-        // Producto menos vendido
-        // Tendencias por producto
-        /*
+    // Producto mas vendido
+    // Producto menos vendido
+    // Tendencias por producto
+    /*
                     SELECT 
                 producto.nombre,
                 SUM(detalle_orden.cantidad * detalle_orden.precio) AS total
@@ -169,43 +169,98 @@ class ServicioKPI
 
 
         */
-     function ventas_productos($objeto){
+    function ventas_productos($objeto)
+    {
         if (!isset($objeto->meses)) {
             $objeto->meses = 3;
         }
-         if (!isset($objeto->tendencias)) {
+        if (!isset($objeto->tendencias)) {
             $objeto->tendencias = false;
         }
-         if (!isset($objeto->idproducto)) {
-            $objeto->idproducto =0;
+        if (!isset($objeto->idproducto)) {
+            $objeto->idproducto = 0;
         }
 
 
-         $consulta = DB::table('orden')
-            ->join('detalle_orden','detalle_orden.idorden','=','orden.id')
-            ->join ('producto','detalle_orden.idproducto', '=', 'producto.id')
+        $consulta = DB::table('orden')
+            ->join('detalle_orden', 'detalle_orden.idorden', '=', 'orden.id')
+            ->join('producto', 'detalle_orden.idproducto', '=', 'producto.id')
             ->select(
-                "producto.nombre"
-                ,DB::RAW("SUM(detalle_orden.cantidad * detalle_orden.precio)as total")
+                "producto.nombre",
+                DB::RAW("SUM(detalle_orden.cantidad * detalle_orden.precio)as total")
             )
-            
+
             ->whereRAW("orden.fecha >= DATE_SUB(NOW(), INTERVAL " . $objeto->meses . " MONTH)")
             ->groupBy("producto.id")
-            ->orderByRAW("SUM(detalle_orden.cantidad * detalle_orden.precio) desc"); 
+            ->orderByRAW("SUM(detalle_orden.cantidad * detalle_orden.precio) desc");
 
-             if ($objeto->tendencias) {
+        if ($objeto->tendencias) {
             $consulta->groupBy(DB::RAW("DATE_FORMAT(orden.fecha,'%m-%Y')"))
                 ->orderByRAW("DATE_FORMAT(orden.fecha,'%m-%Y') asc")
                 ->addSelect(DB::RAW("DATE_FORMAT(orden.fecha,'%m-%Y') as fecha"));
         }
 
-        
 
-        if($objeto->idproducto!=0){
-            $consulta->where("producto.id",$objeto->idproducto);
+
+        if ($objeto->idproducto != 0) {
+            $consulta->where("producto.id", $objeto->idproducto);
         }
 
         return $consulta->get();
+    }
 
+    /*
+        Sin filtro de cliente
+         select categoria.nombre
+          ,sum(detalle_orden.precio*detalle_orden.cantidad)
+          from detalle_orden
+          join detalle_orden on orden.id=detalle_orden.idorden
+          join producto on producto.id=detalle_orden.idproducto
+          join categorio on categoria categoria.id=producto.categoria
+          where DATE_SUB(now(), INTERVAL 3 MONTH)
+            
+
+            Con filtro de clientes 
+         select categoria.nombre
+          ,sum(detalle_orden.precio*detalle_orden.cantidad)
+          from detalle_orden
+          join detalle_orden on orden.id=detalle_orden.idorden
+          join producto on producto.id=detalle_orden.idproducto
+          join categorio on categoria categoria.id=producto.categoria
+          join cliente on orden.idcliente=cliente.id
+          where DATE_SUB(now(), INTERVAL 3 MONTH)
+            and cliente.genero='Mujer'
+          
+    */
+
+
+
+    function total_categorias($objeto)
+    {
+        if (!isset($objeto->genero))
+            $objeto->genero = '';
+
+        if (!isset($objeto->meses)) {
+            $objeto->meses = 3;
+        }
+
+        
+        $consulta=DB::table('orden')
+        ->join('detalle_orden', 'detalle_orden.idorden', '=', 'orden.id')
+        ->join('producto', 'detalle_orden.idproducto', '=', 'producto.id')
+        ->join('categoria', 'categoria.id', '=', 'producto.categoria')
+        ->select (
+            "categoria.nombre"
+            ,DB::RAW("SUM(detalle_orden.cantidad*detalle_orden.precio) as total")
+        )
+        ->whereRaw("orden.fecha>=DATE_SUB(now(), INTERVAL ".$objeto->meses." MONTH)")
+        ->groupBy("categoria.nombre");
+
+        if($objeto->genero!=''){
+            $consulta->join('cliente', 'orden.idcliente', '=', 'cliente.id')
+                     ->where('cliente.genero', $objeto->genero);
+        }
+
+        return $consulta->get();
     }
 }
