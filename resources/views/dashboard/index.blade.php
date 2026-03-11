@@ -115,8 +115,8 @@
               </div>
               Aqui va la otra grafica
               <apexchart
-                :options="chart1.configuracion"
-                :series="chart1.series">
+                :options="chart2.configuracion"
+                :series="chart2.series">
               </apexchart>
 
             </div>
@@ -143,10 +143,23 @@
               </apexchart>
             </div>
             <!-- Chart4 -->
-            <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
-              Aqui va la grafica 4
+             <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
+              <p class="text-[#181511] text-base font-medium leading-normal">Usuarios x edades</p>
+              <div class="flex gap-2 items-center">
+                <select v-model="filtro_chart_4.idocupacion" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <option value="0">Todos las ocupaciones</option>
+                  <option v-for="ocupacion in ocupaciones" :value="ocupacion.id">@{{ocupacion.nombre}}</option>
+                </select>
+                <select v-model="filtro_chart_4.idgenero" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <option value="0">Todos los generos</option>
+                  <option v-for="genero in generos" :value="genero">@{{genero}}</option>
+                </select>
+              </div>
+              <apexchart
+                :options="chart4.configuracion"
+                :series="chart4.series">
+              </apexchart>
             </div>
-          </div>
           <!-- Reglon 2 -->
 
           <div class="flex flex-wrap gap-4 px-4 py-6">
@@ -220,6 +233,7 @@
       </div>
     </div>
   </div>
+  </div>
   <script src="{{ asset('apexcharts.js') }}"></script>
   <script src="{{ asset('vue.js') }}"></script>
   <script src="{{ asset('vue-apexcharts.js') }}"></script>
@@ -236,6 +250,7 @@
           series1: [],
           series2: [],
           series3: [],
+          series4: [],
           valores: [44, 55, 13, 43, 22]
             // ,valores1:[] 
 
@@ -271,6 +286,11 @@
 
 
           }
+          ,filtro_chart_4: {
+            idocupacion: 0,
+            idgenero: 0
+
+          }
         }
       },
       methods: {},
@@ -303,6 +323,19 @@
           for (i = 0; i < this.series3.length; i++) {
             final.series.push(this.series3[i].total)
             final.configuracion.labels.push(this.series3[i].genero);
+          }
+          return final;
+        }
+        ,chart4: function() {
+          let = plantilla = Pie();
+          // plantilla.xaxis.categories.push('Ventas');
+          let = final = {
+            series: [],
+            configuracion: plantilla
+          }
+          for (i = 0; i < this.series4.length; i++) {
+            final.series.push(this.series4[i].total)
+            final.configuracion.labels.push(this.series4[i].edad);
           }
           return final;
         }
@@ -411,6 +444,37 @@
           },
           deep: true
         }
+        ,filtro_chart_4: {
+          handler: function(newValue) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{route("demografico_edad")}}', true);
+            var self = this;
+            xhr.onreadystatechange = function() {
+              if (this.readyState == 4) {
+
+                //Pregunto si todo salio bien
+                if (this.status == 200) {
+                  self.series4.splice(0,self.series4.length);
+                  info = JSON.parse(this.responseText);
+                  // self.total_ventas = info.total;
+                  for (i = 0; i < info.length; i++) {
+                    self.series4.push(info[i]);
+                  }
+                  // console.log('ya calleron los datos', info);
+                }
+
+              }
+
+            }
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify({
+            idocupacion: newValue.idocupacion
+            ,idgenero: newValue.idgenero
+            ,_token: '{{csrf_token()}}'
+          }));
+          },
+          deep: true
+        }
       }
 
 
@@ -491,6 +555,28 @@
               // self.total_ventas = info.total;
               for (i = 0; i < info.length; i++) {
                 self.series3.push(info[i]);
+              }
+              // console.log('ya calleron los datos', info);
+            }
+
+          }
+
+        }
+        xhr.send();
+
+        // Datos del chart4
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{route("demografico_edad")}}', true);
+        var self = this;
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+
+            //Pregunto si todo salio bien
+            if (this.status == 200) {
+              info = JSON.parse(this.responseText);
+              // self.total_ventas = info.total;
+              for (i = 0; i < info.length; i++) {
+                self.series4.push(info[i]);
               }
               // console.log('ya calleron los datos', info);
             }

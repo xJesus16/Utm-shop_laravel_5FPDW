@@ -122,4 +122,18 @@ class DashBoardController extends Controller
         $resultado = $servicio->demografico_genero($objeto);
         return response()->json($resultado);
     }
+
+
+    function demografico_edad(Request $r){
+         $context=$r->all();
+        $servicio=new ServicioKPI();
+        $objeto=new \StdClass();
+        if(isset($context['idocupacion']))
+            $objeto->idocupacion=$context['idocupacion'];
+        if(isset($context['idgenero']))
+            $objeto->idgenero=$context['idgenero'];
+        $resultado=new \StdClass();
+        $resultado=$servicio->demografico_edad($objeto);
+        return response ()->json($resultado);
+    }
 }

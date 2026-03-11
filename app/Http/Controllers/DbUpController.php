@@ -45,6 +45,7 @@ class DbUpController extends Controller
             $cliente->idedad = $edades->random()->id;
             $cliente->idocupacion = $ocupaciones->random()->id;
             $cliente->genero = $faker->randomElement($this->generos);
+            $cliente->fecha_registro=$faker->dateTimeBetween($startDate = '-1 year', $endDate = 'now');
             $cliente->save();
         }
     }
@@ -60,6 +61,7 @@ class DbUpController extends Controller
         $clientes = Cliente::all();
         $productos = Producto::all();
         $extras = Extra::all();
+        $ocupaciones=Ocupacion::all();
 
 
         for ($i = 1; $i <= 100; $i++) {
@@ -77,7 +79,7 @@ class DbUpController extends Controller
 
 
                 //crear extras con ayuda del faker y la coleccion de extras
-                $cantidad_extras = $faker->numberBetween(1, 10);
+                $cantidad_extras = $faker->numberBetween(1, 11);
                 $extras_random = $extras->random($cantidad_extras);
 
                 

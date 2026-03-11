@@ -294,4 +294,31 @@ class ServicioKPI
         }
         return $consulta->get();
     }
+
+    function demografico_edad($objeto){
+        if(!isset($objeto->idocupacion))
+        $objeto->idocupacion=0;
+
+    if(!isset($objeto->idgenero))
+        $objeto->idgenero='';
+
+    $consulta=DB::table('cliente')
+                ->join('edad','cliente.idedad','=','edad.id')
+                ->select(
+                    'edad.nombre as edad',
+                    DB::raw("COUNT(*) as total")
+                )
+                ->groupBy('edad.nombre','edad.id')
+                ->orderBy('edad.id');
+
+    if($objeto->idocupacion!=0){
+        $consulta->where('cliente.idocupacion',$objeto->idocupacion);
+    }
+
+    if($objeto->idgenero!=''){
+        $consulta->where('cliente.genero',$objeto->idgenero);
+    }
+
+    return $consulta->get();
+    }
 }
