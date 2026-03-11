@@ -1,0 +1,9 @@
+Cuantos usuarios hay en total x genero
+    Hombre 23
+    Mujer 34
+    Sin especificar 3
+
+    select cliente.genero
+        ,count(*) as total
+        from cliente
+        group by cliente.genero

@@ -27,6 +27,7 @@ Route::match(['GET','POST'],'/dashboard/ventas',[DashBoardController::class, 'to
 Route::match(['GET','POST'],'/dashboard/ventas/categorias',[DashBoardController::class, 'total_ventas_categoria'])->name('total_ventas_categoria');
 Route::get('/dashboard/ventas/canal',[DashBoardController::class, 'total_ventas_canal'])->name('total_ventas_canal');
 Route::get('/dashboard/ventas/producto',[DashBoardController::class, 'total_ventas_producto'])->name('total_ventas_producto');
+Route::get('/dashboard/demografico/genero',[DashBoardController::class, 'demografico_genero'])->name('demografico_genero');
 Route::get('/dashboard',[DashBoardController::class, 'index'])->name('index');
 // por ai acaso Route::post('/venta/save',[CoffeshopController::class, 'guardar_orden'])->name('guardar_orden');
 

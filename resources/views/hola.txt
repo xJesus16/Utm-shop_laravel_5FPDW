@@ -146,7 +146,17 @@ GROUP BY categoria.nombre;
 
 
 
-
+SELECT 
+    c.nombre AS categoria_nombre,
+    SUM(do.precio * do.cantidad) AS total_ventas
+FROM orden o
+JOIN detalle_orden do ON o.id = do.idorden
+JOIN producto p ON do.idproducto = p.id
+JOIN categoria c ON p.categoria = c.id
+JOIN cliente cl ON o.idcliente = cl.id
+WHERE o.fecha >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+  AND cl.genero = 'Mujer'
+GROUP BY c.nombre;
 
 
 

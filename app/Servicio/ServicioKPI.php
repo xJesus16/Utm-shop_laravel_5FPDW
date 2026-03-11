@@ -263,4 +263,23 @@ class ServicioKPI
 
         return $consulta->get();
     }
+
+
+    /*
+    select cliente.genero
+        ,count(*) as total
+        from cliente
+        group by cliente.genero
+    */
+
+
+    function demografico_genero($objeto){
+          $consulta=DB::table('cliente')
+                    ->select(
+                        'cliente.genero'
+                        ,DB::RAW("count(*) as total")
+                    )
+                    ->groupBy('cliente.genero');
+            return $consulta->get();
+    }
 }

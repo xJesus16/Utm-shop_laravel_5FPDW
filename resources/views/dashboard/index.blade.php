@@ -121,6 +121,24 @@
 
             </div>
           </div>
+          <!-- Reglon 2 -->
+           <h2 class="text-[#181511] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Analisis demografico</h2>
+           <div class="flex flex-wrap gap-4 px-4 py-6">
+              <!-- Chart3 -->
+             <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
+              <p class="text-[#181511] text-base font-medium leading-normal">Usuarios x genero</p>
+               <apexchart
+                    :options="chart3.configuracion"
+                    :series="chart3.series">
+                  </apexchart>
+             </div>
+             <!-- Chart4 -->
+              <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
+              Aqui va la grafica 4
+             </div>
+           </div>
+          <!-- Reglon 2 -->
+
           <div class="flex flex-wrap gap-4 px-4 py-6">
             <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6 relative">
               <div class="flex items-start justify-between">
@@ -196,6 +214,7 @@
   <script src="{{ asset('vue.js') }}"></script>
   <script src="{{ asset('vue-apexcharts.js') }}"></script>
   <script src="{{ asset('PlantillaColumna.js') }}"></script>
+  <script src="{{ asset('PlantillaPie.js') }}"></script>
   <script>
     Vue.use(VueApexCharts);
     //  Vue.component('apexchart', VueApexCharts);
@@ -206,6 +225,7 @@
           total_ventas: 0
          ,series1: []
          ,series2: []
+         ,series3: []
           ,valores: [44, 55, 13, 43, 22]
             // ,valores1:[] 
 
@@ -251,6 +271,19 @@
           let = final = {
             series: this.series2
             ,configuracion: plantilla
+          }
+          return final;
+        }
+        ,chart3: function() {
+          let = plantilla = Pie();
+          // plantilla.xaxis.categories.push('Ventas');
+          let = final = {
+            series:[]
+            ,configuracion:plantilla
+          }
+          for(i=0;i<this.series3.length;i++){
+            final.series.push(this.series3[i].total)
+            final.configuracion.labels.push(this.series3[i].genero);
           }
           return final;
         }
@@ -382,6 +415,29 @@
                   name: info.categorias[i].nombre,
                   data: [parseFloat(info.categorias[i].total)]
                 });
+              }
+              // console.log('ya calleron los datos', info);
+            }
+
+          }
+
+        }
+        xhr.send();
+
+
+        // Datos del chart3
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{route("demografico_genero")}}', true);
+        var self = this;
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+
+            //Pregunto si todo salio bien
+            if (this.status == 200) {
+              info = JSON.parse(this.responseText);
+              // self.total_ventas = info.total;
+              for (i=0;i<info.length;i++) {
+                self.series3.push(info[i]);
               }
               // console.log('ya calleron los datos', info);
             }

@@ -97,14 +97,23 @@ class DashBoardController extends Controller
     {
         $context = $r->all();
 
-
         $servicio = new ServicioKPI();
         $objeto = new \StdClass();
         if (isset($context['genero']))
             $objeto->genero = $context['genero'];
         $resultado = new \stdClass();
         $info = $servicio->total_categorias($objeto);
-        $resultado->categorias=$info;
+        $resultado->categorias = $info;
+        return response()->json($resultado);
+    }
+
+    function demografico_genero(){
+    
+
+        $servicio = new ServicioKPI();
+        $objeto = new \StdClass();
+        $resultado = new \stdClass();
+        $resultado = $servicio->demografico_genero($objeto);
         return response()->json($resultado);
     }
 }
