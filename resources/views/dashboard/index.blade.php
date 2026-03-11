@@ -77,7 +77,7 @@
                     <option value="0">Todos</option>
                     <option v-for="producto in productos" :value="producto.id">@{{producto.nombre}}</option>
                   </select>
-                  <select v-model="filtro_canal" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <select v-model="filtro_canal_1" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
                     <option value="0">Todos los canales</option>
                     <option v-for="canal in canales" :value="canal">@{{canal}}</option>
                   </select>
@@ -151,7 +151,7 @@
               <p class="text-[#181511] text-base font-medium leading-normal">Usuarios x edades</p>
               <div class="flex gap-2 items-center">
                 <select v-model="filtro_chart_4.idocupacion" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
-                  <option value="">Todos las ocupaciones</option>
+                  <option value="0">Todos las ocupaciones</option>
                   <option v-for="ocupacion in ocupaciones" :value="ocupacion.id">@{{ocupacion.nombre}}</option>
                 </select>
                 <select v-model="filtro_chart_4.idgenero" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
@@ -285,6 +285,7 @@
           ocupaciones: <?php echo json_encode($ocupaciones); ?>,
           canales: <?php echo json_encode($canales); ?>,
           filtro_chart_1: 0,
+          filtro_canal_1: 0,
           filtro_chart_2: '',
           filtro_chart_3: {
             idedad: 0,
@@ -385,10 +386,45 @@
           xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
           xhr.send(JSON.stringify({
             idproducto: newValue,
-            _token: '{{csrf_token()}}'
+            canal:this.filtro_canal_1
+            ,_token: '{{csrf_token()}}'
           }));
-        },
-        filtro_chart_2: function(newValue) {
+        }
+        ,filtro_canal_1: function(newValue){
+
+              this.series1.splice(0,this.series1.length);
+
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST', '{{route("total_ventas")}}', true);
+              var self=this;
+
+              xhr.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200){
+
+                  info = JSON.parse(this.responseText);
+                  self.total_ventas = info.total;
+
+                  for(i=0;i<info.tendencias.length;i++){
+                    self.series1.push({
+                      name: info.tendencias[i].fecha,
+                      data: [parseFloat(info.tendencias[i].total)]
+                    });
+                  }
+
+                }
+              }
+
+              xhr.setRequestHeader("Content-Type","application/json");
+
+              xhr.send(JSON.stringify({
+                  idproducto: this.filtro_chart_1,
+                  canal: newValue,
+                  _token: '{{csrf_token()}}'
+              }));
+
+            }
+        
+        ,filtro_chart_2: function(newValue) {
           this.series2.splice(0, this.series2.length);
           //console.log('Este producto vamos a enviar',newValue);
 

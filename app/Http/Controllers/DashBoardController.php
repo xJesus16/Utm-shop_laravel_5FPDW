@@ -27,29 +27,34 @@ class DashBoardController extends Controller
         return view('dashboard.index')->with($datos);
     }
 
-    function total_ventas(Request $r)
-    {
-        $context = $r->all();
-        // dd($context);
-        $servicio = new ServicioKPI();
-        $objeto = new \stdClass();
-        if (isset($context['idproducto']))
-            $objeto->idproducto = $context['idproducto'];
-        $info = $servicio->total_ventas($objeto);
-        // dd($info[0]->total);
-        $objeto1 = new \stdClass();
-        $objeto1->tendencias = true;
-        if (isset($context['idproducto']))
-            $objeto1->idproducto = $context['idproducto'];
-        // $objeto1->meses=6;
-        $info2 = $servicio->total_ventas($objeto1);
-        // dd($info2);
+    function total_ventas(Request $r){
+        $context=$r->all();
+        //dd($context);
+        $servicio=new ServicioKPI();
+        $objeto=new \StdClass();
+        if(isset($context['idproducto']))
+            $objeto->idproducto=$context['idproducto'];
+        if(isset($context['canal']))
+            $objeto->canal=$context['canal'];
+        $info=$servicio->total_ventas($objeto);
+        //dd($info[0]->total);
 
-        $resultado = new \stdClass();
-        $resultado->tendencias = $info2;
-        $resultado->total = $info[0]->total;
+        $objeto1=new \StdClass();
+        $objeto1->tendencias=true;
+        if(isset($context['idproducto']))
+            $objeto1->idproducto=$context['idproducto'];
+        if(isset($context['canal']))
+            $objeto1->canal=$context['canal'];
+        //$objeto1->meses=6;
+        $info2=$servicio->total_ventas($objeto1);
+        //dd($info2);
+
+        $resultado=new \stdClass();
+        $resultado->tendencias=$info2;
+        $resultado->total=$info[0]->total;
 
         return response()->json($resultado);
+    
     }
 
 
