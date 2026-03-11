@@ -124,6 +124,12 @@
               <p>Productos</p>
             </a>
           </li>
+           <li class="nav-item">
+            <a href="{{ route ('usuario') }}" class="nav-link">
+            
+              <p>Usuarios</p>
+            </a>
+          </li>
           
 
         </ul>

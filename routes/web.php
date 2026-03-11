@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriaExtraController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\DbUpController;
 use App\Http\Controllers\TamanioController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\ProductoController;
 
@@ -59,6 +60,11 @@ Route::post('extra/guardar', [ExtraController::class, 'guardar'])->name ('extra.
 Route::get('/producto', [ProductoController::class, 'producto'])->name ('producto');
 Route::get('producto/formulario/{id?}', [ProductoController::class, 'formulario'])->name ('producto.formulario');
 Route::post('producto/guardar', [ProductoController::class, 'guardar'])->name ('producto.guardar');
+
+//  Catálogo Usuario
+Route::get('/usuario', [UsuarioController::class, 'lista'])->name('usuario');
+Route::get('/usuario/formulario/{id?}', [UsuarioController::class, 'formulario'])->name('usuario.formulario');
+Route::post('/usuario/save', [UsuarioController::class, 'save'])->name('usuario.save');
 
 });
 
