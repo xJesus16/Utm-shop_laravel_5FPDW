@@ -22,6 +22,7 @@ class DashBoardController extends Controller
         $datos['productos']=Producto::all();
         $datos['generos']=array('Hombre', 'Mujer', 'No indica');
         $datos['edades']=Edad::all();
+        $datos['canales']=array('WEB', 'APP', 'KIOSKO', 'TAQUILLA');
         $datos['ocupaciones']=Ocupacion::all();
         return view('dashboard.index')->with($datos);
     }

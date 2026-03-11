@@ -72,10 +72,14 @@
                     <p class="text-[#078810] text-base font-medium leading-normal">$1,250</p>
                   </div>
                 </div>
-                <div class="flex items-center">
+                <div class="flex-col-gap-2">
                   <select v-model="filtro_chart_1" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
                     <option value="0">Todos</option>
                     <option v-for="producto in productos" :value="producto.id">@{{producto.nombre}}</option>
+                  </select>
+                  <select v-model="filtro_canal" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                    <option value="0">Todos los canales</option>
+                    <option v-for="canal in canales" :value="canal">@{{canal}}</option>
                   </select>
                 </div>
               </div>
@@ -147,11 +151,11 @@
               <p class="text-[#181511] text-base font-medium leading-normal">Usuarios x edades</p>
               <div class="flex gap-2 items-center">
                 <select v-model="filtro_chart_4.idocupacion" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
-                  <option value="0">Todos las ocupaciones</option>
+                  <option value="">Todos las ocupaciones</option>
                   <option v-for="ocupacion in ocupaciones" :value="ocupacion.id">@{{ocupacion.nombre}}</option>
                 </select>
                 <select v-model="filtro_chart_4.idgenero" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
-                  <option value="0">Todos los generos</option>
+                  <option value="">Todos los generos</option>
                   <option v-for="genero in generos" :value="genero">@{{genero}}</option>
                 </select>
               </div>
@@ -251,6 +255,7 @@
           series2: [],
           series3: [],
           series4: [],
+          canales: [],
           valores: [44, 55, 13, 43, 22]
             // ,valores1:[] 
 
@@ -278,6 +283,7 @@
           generos: <?php echo json_encode($generos); ?>,
           edades: <?php echo json_encode($edades); ?>,
           ocupaciones: <?php echo json_encode($ocupaciones); ?>,
+          canales: <?php echo json_encode($canales); ?>,
           filtro_chart_1: 0,
           filtro_chart_2: '',
           filtro_chart_3: {

@@ -60,6 +60,10 @@ class ServicioKPI
             $objeto->idproducto = 0;
         }
 
+        if(!isset($objeto->idcanal)){
+            $objeto->idcanal='';
+        }
+
 
         // Defino la consulta base
         if ($objeto->idproducto == 0) {
