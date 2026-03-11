@@ -78,7 +78,7 @@
                     <option v-for="producto in productos" :value="producto.id">@{{producto.nombre}}</option>
                   </select>
                   <select v-model="filtro_canal_1" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
-                    <option value="0">Todos los canales</option>
+                    <option value="">Todos los canales</option>
                     <option v-for="canal in canales" :value="canal">@{{canal}}</option>
                   </select>
                 </div>
