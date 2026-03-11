@@ -403,7 +403,7 @@
                 info = JSON.parse(this.responseText);
                 for (i = 0; i < info.categorias.length; i++) {
                   self.series2.push({
-                    name: info.categorias[i].fecha,
+                    name: info.categorias[i].nombre,
                     data: [parseFloat(info.categorias[i].total)]
                   });
                 }

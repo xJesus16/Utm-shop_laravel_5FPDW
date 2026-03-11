@@ -62,7 +62,7 @@ Route::get('producto/formulario/{id?}', [ProductoController::class, 'formulario'
 Route::post('producto/guardar', [ProductoController::class, 'guardar'])->name ('producto.guardar');
 
 //  Catálogo Usuario
-Route::get('/usuario', [UsuarioController::class, 'lista'])->name('usuario');
+Route::get('/usuario', [UsuarioController::class, 'lista'])->name('lista');
 Route::get('/usuario/formulario/{id?}', [UsuarioController::class, 'formulario'])->name('usuario.formulario');
 Route::post('/usuario/save', [UsuarioController::class, 'save'])->name('usuario.save');
 

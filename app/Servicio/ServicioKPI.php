@@ -225,15 +225,15 @@ class ServicioKPI
                     
 
                     Con filtro de clientes 
-                select categoria.nombre
-                ,sum(detalle_orden.precio*detalle_orden.cantidad)
-                from detalle_orden
-                join detalle_orden on orden.id=detalle_orden.idorden
-                join producto on producto.id=detalle_orden.idproducto
-                join categorio on categoria categoria.id=producto.categoria
-                join cliente on orden.idcliente=cliente.id
-                where DATE_SUB(now(), INTERVAL 3 MONTH)
-                    and cliente.genero='Mujer'
+                    select categoria.nombre
+                    ,sum(detalle_orden.precio*detalle_orden.cantidad)
+                    from detalle_orden
+                    join detalle_orden on orden.id=detalle_orden.idorden
+                    join producto on producto.id=detalle_orden.idproducto
+                    join categorio on categoria categoria.id=producto.categoria
+                    join cliente on orden.idcliente=cliente.id
+                    where DATE_SUB(now(), INTERVAL 3 MONTH)
+                        and cliente.genero='Mujer'
                 
             */
 

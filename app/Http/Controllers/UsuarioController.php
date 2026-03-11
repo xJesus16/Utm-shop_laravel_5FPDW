@@ -91,6 +91,6 @@ class UsuarioController extends Controller
         break;
     }
 
-    return redirect()->route('lista_usuario');
+    return redirect()->route('usuario');
 }
 }

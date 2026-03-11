@@ -20,11 +20,9 @@ Usuario
 
     <div class="form-group">
     <label for="idrol">Rol</label>
-    <select name="idrol" class="form-control">
+    <select class="form-control" name="idrol" >
         @foreach($idrol as $rol)
-            <option value="{{ $rol->id }}" {{ $usuarios->idrol == $rol->id ? 'selected' : '' }}>
-                {{ $rol->nombre }}
-            </option>   
+            <option value="{{$rol->id}}">{{$rol->nombre}}</option>
         @endforeach
     </select>
     </div>
