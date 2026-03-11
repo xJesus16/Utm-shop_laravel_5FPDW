@@ -1,0 +1,7 @@
+Estos son los requerimientos extras de la entrega:
+1.-Agregar al cliente la fecha de registro.Considerar esto al momento de crear con Faker a los clientes
+2.-En el proceso de creacion de ordenes ficticias considerar la creacion ficticia de los registros correspondientes a los extras
+3.-En el dashboard agregar los siguientes charts además de los vistos en clase
+    Un Análisis demográfico de Edades teniendo como filtros las ocupaciones y generos
+    Un análisis de ventas por producto , con filtros de hombres y mujeres
+    Modificar el chart principal de ventas totales para que ademas de un filtro de productos tenga un filtro por canal

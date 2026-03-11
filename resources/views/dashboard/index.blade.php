@@ -83,7 +83,7 @@
               <div class="flex min-h-[180px] flex-1 flex-col gap-8 py-4">
                 <div>
                   <!-- Aqui va la grafica -->
-                   
+
                   <apexchart
                     :options="chart1.configuracion"
                     :series="chart1.series">
@@ -107,36 +107,46 @@
                 <p class="text-[#897961] text-base font-normal leading-normal">Capuchino</p>
                 <p class="text-[#078810] text-base font-medium leading-normal">20</p>
               </div>
-               <div class="flex items-center">
-                  <select v-model="filtro_chart_2" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
-                    <option value="">Todos</option>
-                    <option v-for="genero in generos" :value="genero">@{{genero}}</option>
-                  </select>
-                </div>
+              <div class="flex items-center">
+                <select v-model="filtro_chart_2" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <option value="">Todos</option>
+                  <option v-for="genero in generos" :value="genero">@{{genero}}</option>
+                </select>
+              </div>
               Aqui va la otra grafica
-               <apexchart
-                    :options="chart1.configuracion"
-                    :series="chart1.series">
-                  </apexchart>
+              <apexchart
+                :options="chart1.configuracion"
+                :series="chart1.series">
+              </apexchart>
 
             </div>
           </div>
           <!-- Reglon 2 -->
-           <h2 class="text-[#181511] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Analisis demografico</h2>
-           <div class="flex flex-wrap gap-4 px-4 py-6">
-              <!-- Chart3 -->
-             <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
+          <h2 class="text-[#181511] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Analisis demografico</h2>
+          <div class="flex flex-wrap gap-4 px-4 py-6">
+            <!-- Chart3 -->
+            <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
               <p class="text-[#181511] text-base font-medium leading-normal">Usuarios x genero</p>
-               <apexchart
-                    :options="chart3.configuracion"
-                    :series="chart3.series">
-                  </apexchart>
-             </div>
-             <!-- Chart4 -->
-              <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
+              <div class="flex gap-2 items-center">
+                <select v-model="filtro_chart_3.idedad" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <option value="">Todas las edades</option>
+                  <option v-for="edad in edades" :value="edad.id">@{{edad.nombre}}</option>
+                </select>
+                <select v-model="filtro_chart_3.idocupacion" class="custom-select h-9 cursor-pointer rounded-md border border-[#e6e1db] bg-white px-3 py-1 text-xs font-semibold text-[#897961] focus:border-[#897961] focus:ring-0">
+                  <option value="">Todos las ocupaciones</option>
+                  <option v-for="ocupacion in ocupaciones" :value="ocupacion.id">@{{ocupacion.nombre}}</option>
+                </select>
+              </div>
+              <apexchart
+                :options="chart3.configuracion"
+                :series="chart3.series">
+              </apexchart>
+            </div>
+            <!-- Chart4 -->
+            <div class="flex min-w-72 flex-1 flex-col gap-2 rounded-lg border border-[#e6e1db] p-6">
               Aqui va la grafica 4
-             </div>
-           </div>
+            </div>
+          </div>
           <!-- Reglon 2 -->
 
           <div class="flex flex-wrap gap-4 px-4 py-6">
@@ -222,20 +232,21 @@
       el: '#app',
       data: function() {
         return {
-          total_ventas: 0
-         ,series1: []
-         ,series2: []
-         ,series3: []
-          ,valores: [44, 55, 13, 43, 22]
+          total_ventas: 0,
+          series1: [],
+          series2: [],
+          series3: [],
+          valores: [44, 55, 13, 43, 22]
             // ,valores1:[] 
 
-            
-          ,configuracion: {
+
+            ,
+          configuracion: {
             chart: {
               width: 380,
               type: 'pie',
-            }
-            ,labels: ['Canal A', 'Canal B', 'Canal C', 'Canal D', 'Canal E'],
+            },
+            labels: ['Canal A', 'Canal B', 'Canal C', 'Canal D', 'Canal E'],
             responsive: [{
               breakpoint: 480,
               options: {
@@ -247,15 +258,23 @@
                 }
               }
             }]
+          },
+          productos: <?php echo json_encode($productos); ?>,
+          generos: <?php echo json_encode($generos); ?>,
+          edades: <?php echo json_encode($edades); ?>,
+          ocupaciones: <?php echo json_encode($ocupaciones); ?>,
+          filtro_chart_1: 0,
+          filtro_chart_2: '',
+          filtro_chart_3: {
+            idedad: 0,
+            idocupacion: 0
+
+
           }
-          ,productos: <?php echo json_encode($productos); ?>
-          ,generos: <?php echo json_encode($generos); ?>
-          ,filtro_chart_1: 0
-          ,filtro_chart_2: ''
         }
-      }
-      ,methods: {}
-      ,computed: {
+      },
+      methods: {},
+      computed: {
         chart1: function() {
           let = plantilla = Columna();
           plantilla.xaxis.categories.push('Ventas');
@@ -264,24 +283,24 @@
             configuracion: plantilla
           }
           return final;
-        }
-        ,chart2: function() {
+        },
+        chart2: function() {
           let = plantilla = Columna();
           plantilla.xaxis.categories.push('Ventas');
           let = final = {
-            series: this.series2
-            ,configuracion: plantilla
+            series: this.series2,
+            configuracion: plantilla
           }
           return final;
-        }
-        ,chart3: function() {
+        },
+        chart3: function() {
           let = plantilla = Pie();
           // plantilla.xaxis.categories.push('Ventas');
           let = final = {
-            series:[]
-            ,configuracion:plantilla
+            series: [],
+            configuracion: plantilla
           }
-          for(i=0;i<this.series3.length;i++){
+          for (i = 0; i < this.series3.length; i++) {
             final.series.push(this.series3[i].total)
             final.configuracion.labels.push(this.series3[i].genero);
           }
@@ -290,16 +309,17 @@
       }
 
 
-      
-      ,watch: {
+
+      ,
+      watch: {
         /*
       xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xhr.send(JSON.stringify(this.orden));
 
         */
         filtro_chart_1: function(newValue) {
-          this.series1.splice(0,this.series1.length);
-          console.log('Este producto vamos a enviar',newValue);
+          this.series1.splice(0, this.series1.length);
+          console.log('Este producto vamos a enviar', newValue);
 
           var xhr = new XMLHttpRequest();
           xhr.open('POST', '{{route("total_ventas")}}', true);
@@ -325,12 +345,12 @@
           }
           xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
           xhr.send(JSON.stringify({
-                      idproducto:newValue
-                      ,_token:'{{csrf_token()}}'
-                      }));
-        }
-        ,filtro_chart_2: function(newValue) {
-          this.series2.splice(0,this.series2.length);
+            idproducto: newValue,
+            _token: '{{csrf_token()}}'
+          }));
+        },
+        filtro_chart_2: function(newValue) {
+          this.series2.splice(0, this.series2.length);
           //console.log('Este producto vamos a enviar',newValue);
 
           var xhr = new XMLHttpRequest();
@@ -356,23 +376,56 @@
           }
           xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
           xhr.send(JSON.stringify({
-                      genero:newValue
-                      ,_token:'{{csrf_token()}}'
-                      }));
+            genero: newValue,
+            _token: '{{csrf_token()}}'
+          }));
+        },
+        filtro_chart_3: {
+          handler: function(newValue) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{route("demografico_genero")}}', true);
+            var self = this;
+            xhr.onreadystatechange = function() {
+              if (this.readyState == 4) {
+
+                //Pregunto si todo salio bien
+                if (this.status == 200) {
+                  self.series3.splice(0,self.series3.length);
+                  info = JSON.parse(this.responseText);
+                  // self.total_ventas = info.total;
+                  for (i = 0; i < info.length; i++) {
+                    self.series3.push(info[i]);
+                  }
+                  // console.log('ya calleron los datos', info);
+                }
+
+              }
+
+            }
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify({
+            idocupacion: newValue.idocupacion
+            ,idedad: newValue.idedad
+            ,_token: '{{csrf_token()}}'
+          }));
+          },
+          deep: true
         }
       }
 
 
-      
-      ,components: {
+
+      ,
+      components: {
         apexchart: VueApexCharts
       }
 
 
 
 
-      
-      ,created() {
+
+      ,
+      created() {
         // Datos del chart1
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '{{route("total_ventas")}}', true);
@@ -436,7 +489,7 @@
             if (this.status == 200) {
               info = JSON.parse(this.responseText);
               // self.total_ventas = info.total;
-              for (i=0;i<info.length;i++) {
+              for (i = 0; i < info.length; i++) {
                 self.series3.push(info[i]);
               }
               // console.log('ya calleron los datos', info);
