@@ -9,6 +9,9 @@ use App\Http\Controllers\DbUpController;
 use App\Http\Controllers\TamanioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\EdadController;
+use App\Http\Controllers\OcupacionController;
+use App\Http\Controllers\RolController;
 use App\Http\Controllers\ProductoController;
 
 Route::get('/', function () {
@@ -66,6 +69,21 @@ Route::post('producto/guardar', [ProductoController::class, 'guardar'])->name ('
 Route::get('/usuario', [UsuarioController::class, 'lista'])->name('lista');
 Route::get('/usuario/formulario/{id?}', [UsuarioController::class, 'formulario'])->name('usuario.formulario');
 Route::post('/usuario/save', [UsuarioController::class, 'save'])->name('usuario.save');
+
+//Catalogo edad
+Route::get('/edad', [EdadController::class,'edad'])->name('edad');
+Route::get('/edad/formulario/{id?}',[EdadController::class,'formulario'])->name('edad.formulario');
+Route::post('/edad/guardar',[EdadController::class,'guardar'])->name('edad.guardar');
+
+// Catalogo ocupacion
+Route::get('/ocupacion', [OcupacionController::class,'ocupacion'])->name('ocupacion');
+Route::get('/ocupacion/formulario/{id?}',[OcupacionController::class,'formulario'])->name('ocupacion.formulario');
+Route::post('/ocupacion/guardar',[OcupacionController::class,'guardar'])->name('ocupacion.guardar');
+//Catalogo de rol
+// Catalogo Rol
+Route::get('/rol',[RolController::class,'rol'])->name('rol');
+Route::get('/rol/formulario/{id?}',[RolController::class,'formulario'])->name('rol.formulario');
+Route::post('/rol/guardar',[RolController::class,'guardar'])->name('rol.guardar');
 
 });
 
