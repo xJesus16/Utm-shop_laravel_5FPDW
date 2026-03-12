@@ -346,4 +346,28 @@ class ServicioKPI
 
 
             */
+
+            function ventas_productos_genero($objeto){
+        if(!isset($objeto->meses)){
+            $objeto->meses=3;
+        }
+        if(!isset($objeto->genero)){
+            $objeto->genero='';
+        }
+        $consulta=DB::table('orden')
+            ->join('detalle_orden','detalle_orden.idorden','=','orden.id')
+            ->join('producto','producto.id','=','detalle_orden.idproducto')
+            ->join('cliente','cliente.id','=','orden.idcliente')
+            ->select(
+                'producto.nombre',
+                DB::raw('SUM(detalle_orden.cantidad) as total')
+            )
+            ->whereRaw("orden.fecha>=DATE_SUB(NOW(), INTERVAL ".$objeto->meses." MONTH)")
+            ->groupBy('producto.id','producto.nombre')
+            ->orderBy('producto.nombre');
+        if($objeto->genero!=''){
+            $consulta->where('cliente.genero',$objeto->genero);
+        }
+        return $consulta->get();
+    }
 }
