@@ -52,7 +52,7 @@
 				</div>
 			</header>
 			<div class="px-40 flex flex-1 justify-center py-5">
-				<div class="layout-content-container flex flex-col max-w-[1900x] flex-1">
+				<div class="layout-content-container flex flex-col max-w-[1800x] flex-1">
 					<div class="flex flex-wrap justify-between gap-3 p-4">
 						<div class="flex min-w-72 flex-col gap-3">
 							<p class="text-[#181511] tracking-light text-[32px] font-bold leading-tight">Consola Ecommerce</p>
@@ -139,6 +139,7 @@
 								:series="chart5.series">
 							</apexchart>
 						</div>
+					</div>
 						<!-- Reglon 2 -->
 						<h2 class="text-[#181511] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Analisis demografico</h2>
 						<div class="flex flex-wrap gap-4 px-4 py-6">
@@ -251,7 +252,7 @@
 					</div>
 				</div>
 			</div>
-			</div> <!-- 👈 ESTE CIERRE ES EL QUE ARREGLA EL ERROR -->
+			</div> 
 		</div>
 		<script src="{{ asset('apexcharts.js') }}"></script>
 		<script src="{{ asset('vue.js') }}"></script>
